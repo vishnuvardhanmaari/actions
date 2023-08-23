@@ -39,11 +39,11 @@ jobs:
       - name: Defining the Env variable through _CI folder
         
         working-directory: ${{ env.MAGENTO_DIR }}
-        run: ls
+        run: "ls && git remote -v && git branch"
           
 
       - name: Defining the Env
-        run: ls
+        run: "ls && git remote -v && git branch"
           
 
       # - name: Set Push Environment
