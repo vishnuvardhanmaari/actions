@@ -1,14 +1,94 @@
-name: learn-github-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+name: Quality Check
+
+on:
+  push:
+    branches:
+      - master
+      - github
+      
+    tags:
+      - "*"
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - master
+      - github
+      
+  workflow_dispatch:
+
 jobs:
-  check-bats-version:
+  quality-check:
     runs-on: ubuntu-latest
+    env:
+      MAGENTO_DIR: '_CI'
+      EXECUTABLE_FOLDER: 'shell'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+
+      - name: Checkout CI repo
+        uses: actions/checkout@v2
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
-      - run: ls
+          repository: vishnuvardhanmaari/aws
+          token: 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
+          path: ${{ env.MAGENTO_DIR }}
+
+      - name: Get branch names
+        id: branch-name
+        uses: tj-actions/branch-names@v4.5
+
+      # - name: Defining the Env variable through _CI folder
+      #   env: 
+      #     OVERRIDE_PHP_FLAG: ${{ secrets.OVERRIDE_PHP_FLAG }}
+      #   working-directory: ${{ env.MAGENTO_DIR }}
+      #   run: |
+      #     if [ ${{ env.OVERRIDE_PHP_FLAG }} ]; then   
+      #       echo "PHP_VERSION=$(jq -r .override_php_version environment.json)" >> $GITHUB_ENV
+      #       echo "PHP_EXTENSION=$(jq -r .override_php_extension environment.json)" >> $GITHUB_ENV
+      #       echo "PHP_TOOLS=$(jq -r .override_php_tools environment.json)" >> $GITHUB_ENV
+      #     else 
+      #       echo "PHP_VERSION=$(jq -r .php_version environment.json)" >> $GITHUB_ENV
+      #       echo "PHP_EXTENSION=$(jq -r .php_extension environment.json)" >> $GITHUB_ENV
+      #       echo "PHP_TOOLS=$(jq -r .php_tools environment.json)" >> $GITHUB_ENV
+      #     fi
+
+      # - name: Defining the Env
+      #   run: |
+      #     echo "EXT_VERSION=$(jq -r .version composer.json)-$(echo $GITHUB_SHA | cut -c1-8)" >> $GITHUB_ENV
+      #     echo "MODULE_NAME=$(jq -r .name composer.json)" >> $GITHUB_ENV
+      #     echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
+      #     echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+
+      # - name: Set Push Environment
+      #   if: steps.branch-name.outputs.is_tag == 'false' && steps.branch-name.outputs.is_default == 'true'
+      #   run: |
+      #     echo "BRANCH=${{ steps.branch-name.outputs.ref_branch }}" >> $GITHUB_ENV
+
+      # - name: Set PR Environment
+      #   if: steps.branch-name.outputs.is_tag == 'false' && steps.branch-name.outputs.is_default == 'false'
+      #   run: |
+      #     echo "BRANCH=${{ steps.branch-name.outputs.current_branch }}" >> $GITHUB_ENV
+
+      # - name: Set Tags Environment
+      #   if: steps.branch-name.outputs.is_tag == 'true'
+      #   run: |
+      #     echo "BRANCH=${{ steps.branch-name.outputs.tag }}" >> $GITHUB_ENV    
+            
+      # - name: Setup PHP with tools
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: ${{ env.PHP_VERSION }}
+      #     extensions: ${{ env.PHP_EXTENSION }}
+      #     tools: ${{ env.PHP_TOOLS }}
+      #     coverage: xdebug    
+
+      # - name: Add HTTP basic auth credentials
+      #   working-directory: ${{ env.MAGENTO_DIR }}
+      #   run: |
+      #     if [ ! -f "auth.json" ]; then
+      #      echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
+      #     fi
+
+      # - name: Get Php extension dir
+      #   run: |
+      #     echo "PHP_DIR=`php-config --extension-dir`" >> $GITHUB_ENV
+
