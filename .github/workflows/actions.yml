@@ -42,12 +42,9 @@ jobs:
         run: ls
           
 
-      # - name: Defining the Env
-      #   run: |
-      #     echo "EXT_VERSION=$(jq -r .version composer.json)-$(echo $GITHUB_SHA | cut -c1-8)" >> $GITHUB_ENV
-      #     echo "MODULE_NAME=$(jq -r .name composer.json)" >> $GITHUB_ENV
-      #     echo "REPO_NAME=${{ github.event.repository.name }}" >> $GITHUB_ENV
-      #     echo "GITHUB_REPOSITORY=${{ github.repository }}" >> $GITHUB_ENV
+      - name: Defining the Env
+        run: ls
+          
 
       # - name: Set Push Environment
       #   if: steps.branch-name.outputs.is_tag == 'false' && steps.branch-name.outputs.is_default == 'true'
