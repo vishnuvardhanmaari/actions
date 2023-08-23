@@ -37,7 +37,7 @@ jobs:
         uses: tj-actions/branch-names@v4.5
 
       - name: Defining the Env variable through _CI folder
-        env: 
+        
         working-directory: ${{ env.MAGENTO_DIR }}
         run: ls
           
