@@ -45,7 +45,17 @@ jobs:
       - name: Defining the Env
         run: "ls && git remote -v && git branch && pwd"
           
-
+      - name: Defining the Env variable through _CI folder
+        env: 
+          OVERRIDE_PHP_FLAG: ${{ secrets.OVERRIDE_PHP_FLAG }}
+        working-directory: ${{ env.MAGENTO_DIR }}
+        run: ls && ls -al && pwd 
+        run: |
+          if [ ${{ env.OVERRIDE_PHP_FLAG }} ]; then   
+            echo "it id defined"
+          else 
+            echo "it is not defined"
+          fi
       # - name: Set Push Environment
       #   if: steps.branch-name.outputs.is_tag == 'false' && steps.branch-name.outputs.is_default == 'true'
       #   run: |
