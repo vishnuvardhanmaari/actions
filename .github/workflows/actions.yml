@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: vishnuvardhanmaari/aws
-          token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          token: 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
           path: ${{ env.MAGENTO_DIR }}
 
       - name: Get branch names
