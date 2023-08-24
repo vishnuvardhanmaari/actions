@@ -49,12 +49,11 @@ jobs:
         env: 
           OVERRIDE_PHP_FLAG: ${{ secrets.OVERRIDE_PHP_FLAG }}
         working-directory: ${{ env.MAGENTO_DIR }}
-        run: ls && ls -al && pwd 
         run: |
           if [ ${{ env.OVERRIDE_PHP_FLAG }} ]; then   
-            echo "it id defined"
+            echo "it id defined" && ls -al && pwd && git branch 
           else 
-            echo "it is not defined"
+            echo "it is not defined" && ls -al && pwd && git branch
           fi
       # - name: Set Push Environment
       #   if: steps.branch-name.outputs.is_tag == 'false' && steps.branch-name.outputs.is_default == 'true'
